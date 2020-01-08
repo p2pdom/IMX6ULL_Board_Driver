@@ -2,23 +2,26 @@
 
 void Led_Init(void)
 {
+    /*开启GPIO1时钟*/
+    CCM_CCGR1 &= ~(3<<26);
+    CCM_CCGR1 |=  (3<<26);
     /*函数初始化IO*/
-    IOMUXC_SetPinMux(IOMUXC_GPIO1_IO03_GPIO1_IO03,0 );
-    IOMUXC_SetPinConfig(IOMUXC_GPIO1_IO03_GPIO1_IO03,0x10B0);
+    LED0_MUX = 0x5;
+    LED0_PAD = 0x10B0;
 
-    GPIO1->GDIR |= (1<<3);
-    LED_Off();
+    GPIO1_GDIR |= (1<<3);
+    GPIO1_DR   |= (1<<3);
 }
 
 //开灯
 void LED_On(void)
 {
-    GPIO1->DR &= ~(1<<3);
+    GPIO1_DR &= ~(1<<3);
 }
 
 //关灯
 void LED_Off(void)
 {
-    GPIO1->DR |=  (1<<3);
+    GPIO1_DR |=  (1<<3);
 }
 

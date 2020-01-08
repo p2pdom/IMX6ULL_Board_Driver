@@ -1,11 +1,10 @@
 #include "main.h"
 
-int main(int argc, char *argv[])
+int main(void)
 {
     int i = 0;
     unsigned int led_state = 0;
     Imx6ull_Clk_Init();
-    clk_all_enable();
     Led_Init();
     Beep_Init();
     Bsp_Key_Init();

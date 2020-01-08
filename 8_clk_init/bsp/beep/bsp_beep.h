@@ -1,5 +1,5 @@
-#ifndef __BEEP_H
-#define __BEEP_H
+#ifndef __BSP_BEEP_H
+#define __BSP_BEEP_H
 
 /*寄存器定义*/
 #define CCGR1 *((volatile unsigned int *)0x020C406C)

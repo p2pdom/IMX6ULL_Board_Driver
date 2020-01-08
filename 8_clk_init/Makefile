@@ -8,7 +8,6 @@ OBJDUMP       := $(CROSS_COMPILE)objdump
 
 INCUDIRS      := project \
                  imx6u \
-                 bsp/clk \
 				 bsp/delay \
 				 bsp/led \
 				 bsp/beep \
@@ -17,7 +16,6 @@ INCUDIRS      := project \
 
 SRCDIRS       := project \
                  imx6u \
-                 bsp/clk \
 				 bsp/delay \
 				 bsp/led \
 				 bsp/beep \

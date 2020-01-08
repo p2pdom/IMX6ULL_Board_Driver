@@ -7,7 +7,6 @@
                 "${workspaceFolder}/project",
                 "${workspaceFolder}/imx6u",
                 "${workspaceFolder}/bsp",
-                "${workspaceFolder}/bsp/clk",
                 "${workspaceFolder}/bsp/delay",
                 "${workspaceFolder}/bsp/led",
                 "${workspaceFolder}/bsp/beep",

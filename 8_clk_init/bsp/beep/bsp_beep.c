@@ -1,4 +1,4 @@
-#include "beep.h"
+#include "bsp_beep.h"
 
 /*
  *  SNVS_TAMPER1即GPIO5_IO1管脚
