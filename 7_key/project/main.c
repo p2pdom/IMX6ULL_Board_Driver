@@ -12,10 +12,12 @@ int main(int argc, char *argv[])
         if(Bsp_Key_Getvalue(PRESS_RETURN) == KEY_PRESS)
         {
             LED_On();
+            Beep_set_status(BEEP_ON);
         }
         if(Bsp_Key_Getvalue(PRESS_RETURN) == KEY_LOOSE)
         {
             LED_Off();
+            Beep_set_status(BEEP_OFF);
         }
     }
 }

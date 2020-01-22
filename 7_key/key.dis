@@ -1,22 +1,22 @@
 
-beep.elf：     文件格式 elf32-littlearm
+key.elf：     文件格式 elf32-littlearm
 
 
 Disassembly of section .text:
 
-87800000 <_bss_start>:
-87800000:	878001d8 			; <UNDEFINED> instruction: 0x878001d8
+87800000 <_start>:
+87800000:	e10f0000 	mrs	r0, CPSR
+87800004:	e3c0001f 	bic	r0, r0, #31
+87800008:	e3800013 	orr	r0, r0, #19
+8780000c:	e129f000 	msr	CPSR_fc, r0
 
-87800004 <_bss_end>:
-87800004:	878001d8 			; <UNDEFINED> instruction: 0x878001d8
+87800010 <_bss_start>:
+87800010:	878002a0 	strhi	r0, [r0, r0, lsr #5]
 
-87800008 <_start>:
-87800008:	e10f0000 	mrs	r0, CPSR
-8780000c:	e3c0001f 	bic	r0, r0, #31
-87800010:	e3800013 	orr	r0, r0, #19
-87800014:	e129f000 	msr	CPSR_fc, r0
-87800018:	e51f0020 	ldr	r0, [pc, #-32]	; 87800000 <_bss_start>
-8780001c:	e51f1020 	ldr	r1, [pc, #-32]	; 87800004 <_bss_end>
+87800014 <_bss_end>:
+87800014:	878002a0 	strhi	r0, [r0, r0, lsr #5]
+87800018:	e51f0010 	ldr	r0, [pc, #-16]	; 87800010 <_bss_start>
+8780001c:	e51f1010 	ldr	r1, [pc, #-16]	; 87800014 <_bss_end>
 87800020:	e3a02000 	mov	r2, #0
 
 87800024 <bss_loop>:
@@ -24,7 +24,7 @@ Disassembly of section .text:
 87800028:	e1500001 	cmp	r0, r1
 8780002c:	dafffffc 	ble	87800024 <bss_loop>
 87800030:	e59fd004 	ldr	sp, [pc, #4]	; 8780003c <loop+0x4>
-87800034:	ea00005b 	b	878001a8 <__main_from_arm>
+87800034:	ea000085 	b	87800250 <__main_from_arm>
 
 87800038 <loop>:
 87800038:	eafffffe 	b	87800038 <loop>
@@ -179,29 +179,113 @@ Disassembly of section .text:
 878001a4:	4770      	bx	lr
 878001a6:	bf00      	nop
 
-878001a8 <__main_from_arm>:
-878001a8:	e51ff004 	ldr	pc, [pc, #-4]	; 878001ac <__main_from_arm+0x4>
-878001ac:	878001b1 			; <UNDEFINED> instruction: 0x878001b1
+878001a8 <inside_key_delay>:
+878001a8:	b082      	sub	sp, #8
+878001aa:	9001      	str	r0, [sp, #4]
+878001ac:	9b01      	ldr	r3, [sp, #4]
+878001ae:	1e5a      	subs	r2, r3, #1
+878001b0:	9201      	str	r2, [sp, #4]
+878001b2:	2b00      	cmp	r3, #0
+878001b4:	d1fa      	bne.n	878001ac <inside_key_delay+0x4>
+878001b6:	b002      	add	sp, #8
+878001b8:	4770      	bx	lr
+878001ba:	bf00      	nop
+
+878001bc <Bsp_Key_Init>:
+878001bc:	f244 026c 	movw	r2, #16492	; 0x406c
+878001c0:	b430      	push	{r4, r5}
+878001c2:	f2c0 220c 	movt	r2, #524	; 0x20c
+878001c6:	238c      	movs	r3, #140	; 0x8c
+878001c8:	f2c0 230e 	movt	r3, #526	; 0x20e
+878001cc:	f44f 7446 	mov.w	r4, #792	; 0x318
+878001d0:	6810      	ldr	r0, [r2, #0]
+878001d2:	f24c 0104 	movw	r1, #49156	; 0xc004
+878001d6:	f2c0 240e 	movt	r4, #526	; 0x20e
+878001da:	f44f 4570 	mov.w	r5, #61440	; 0xf000
+878001de:	f2c0 2109 	movt	r1, #521	; 0x209
+878001e2:	f020 6040 	bic.w	r0, r0, #201326592	; 0xc000000
+878001e6:	6010      	str	r0, [r2, #0]
+878001e8:	6810      	ldr	r0, [r2, #0]
+878001ea:	f040 6040 	orr.w	r0, r0, #201326592	; 0xc000000
+878001ee:	6010      	str	r0, [r2, #0]
+878001f0:	681a      	ldr	r2, [r3, #0]
+878001f2:	f022 021f 	bic.w	r2, r2, #31
+878001f6:	601a      	str	r2, [r3, #0]
+878001f8:	681a      	ldr	r2, [r3, #0]
+878001fa:	f042 0205 	orr.w	r2, r2, #5
+878001fe:	601a      	str	r2, [r3, #0]
+87800200:	6025      	str	r5, [r4, #0]
+87800202:	680b      	ldr	r3, [r1, #0]
+87800204:	bc30      	pop	{r4, r5}
+87800206:	f423 2380 	bic.w	r3, r3, #262144	; 0x40000
+8780020a:	600b      	str	r3, [r1, #0]
+8780020c:	4770      	bx	lr
+8780020e:	bf00      	nop
+
+87800210 <Bsp_Key_Getvalue>:
+87800210:	f44f 4340 	mov.w	r3, #49152	; 0xc000
+87800214:	f2c0 2309 	movt	r3, #521	; 0x209
+87800218:	681b      	ldr	r3, [r3, #0]
+8780021a:	035a      	lsls	r2, r3, #13
+8780021c:	bf48      	it	mi
+8780021e:	2101      	movmi	r1, #1
+87800220:	d40b      	bmi.n	8780023a <Bsp_Key_Getvalue+0x2a>
+87800222:	230a      	movs	r3, #10
+87800224:	461a      	mov	r2, r3
+87800226:	3b01      	subs	r3, #1
+87800228:	2a00      	cmp	r2, #0
+8780022a:	d1fb      	bne.n	87800224 <Bsp_Key_Getvalue+0x14>
+8780022c:	f44f 4340 	mov.w	r3, #49152	; 0xc000
+87800230:	f2c0 2309 	movt	r3, #521	; 0x209
+87800234:	6819      	ldr	r1, [r3, #0]
+87800236:	f3c1 4180 	ubfx	r1, r1, #18, #1
+8780023a:	b930      	cbnz	r0, 8780024a <Bsp_Key_Getvalue+0x3a>
+8780023c:	f44f 4240 	mov.w	r2, #49152	; 0xc000
+87800240:	f2c0 2209 	movt	r2, #521	; 0x209
+87800244:	6813      	ldr	r3, [r2, #0]
+87800246:	035b      	lsls	r3, r3, #13
+87800248:	d5fc      	bpl.n	87800244 <Bsp_Key_Getvalue+0x34>
+8780024a:	4608      	mov	r0, r1
+8780024c:	4770      	bx	lr
+8780024e:	bf00      	nop
+
+87800250 <__main_from_arm>:
+87800250:	e51ff004 	ldr	pc, [pc, #-4]	; 87800254 <__main_from_arm+0x4>
+87800254:	87800259 			; <UNDEFINED> instruction: 0x87800259
 
 Disassembly of section .text.startup:
 
-878001b0 <main>:
-878001b0:	b508      	push	{r3, lr}
-878001b2:	f7ff ff55 	bl	87800060 <clk_all_enable>
-878001b6:	f7ff ff81 	bl	878000bc <Led_Init>
-878001ba:	f7ff ffab 	bl	87800114 <Beep_Init>
-878001be:	f7ff ff9f 	bl	87800100 <LED_Off>
-878001c2:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
-878001c6:	f7ff ff65 	bl	87800094 <delay>
-878001ca:	f7ff ff8f 	bl	878000ec <LED_On>
-878001ce:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
-878001d2:	f7ff ff5f 	bl	87800094 <delay>
-878001d6:	e7f2      	b.n	878001be <main+0xe>
+87800258 <main>:
+87800258:	b508      	push	{r3, lr}
+8780025a:	f7ff ff01 	bl	87800060 <clk_all_enable>
+8780025e:	f7ff ff2d 	bl	878000bc <Led_Init>
+87800262:	f7ff ff57 	bl	87800114 <Beep_Init>
+87800266:	f7ff ffa9 	bl	878001bc <Bsp_Key_Init>
+8780026a:	e004      	b.n	87800276 <main+0x1e>
+8780026c:	2001      	movs	r0, #1
+8780026e:	f7ff ffcf 	bl	87800210 <Bsp_Key_Getvalue>
+87800272:	2801      	cmp	r0, #1
+87800274:	d00e      	beq.n	87800294 <main+0x3c>
+87800276:	2001      	movs	r0, #1
+87800278:	f7ff ffca 	bl	87800210 <Bsp_Key_Getvalue>
+8780027c:	2800      	cmp	r0, #0
+8780027e:	d1f5      	bne.n	8780026c <main+0x14>
+87800280:	f7ff ff34 	bl	878000ec <LED_On>
+87800284:	2001      	movs	r0, #1
+87800286:	f7ff ff79 	bl	8780017c <Beep_set_status>
+8780028a:	2001      	movs	r0, #1
+8780028c:	f7ff ffc0 	bl	87800210 <Bsp_Key_Getvalue>
+87800290:	2801      	cmp	r0, #1
+87800292:	d1f0      	bne.n	87800276 <main+0x1e>
+87800294:	f7ff ff34 	bl	87800100 <LED_Off>
+87800298:	2000      	movs	r0, #0
+8780029a:	f7ff ff6f 	bl	8780017c <Beep_set_status>
+8780029e:	e7ea      	b.n	87800276 <main+0x1e>
 
 Disassembly of section .comment:
 
 00000000 <.comment>:
-   0:	3a434347 	bcc	10d0d24 <_bss_start-0x8672f2dc>
+   0:	3a434347 	bcc	10d0d24 <_start-0x8672f2dc>
    4:	694c2820 	stmdbvs	ip, {r5, fp, sp}^
    8:	6f72616e 	svcvs	0x0072616e
    c:	43434720 	movtmi	r4, #14112	; 0x3720
@@ -224,7 +308,7 @@ Disassembly of section .ARM.attributes:
   1c:	12040a02 	andne	r0, r4, #8192	; 0x2000
   20:	15011404 	strne	r1, [r1, #-1028]	; 0x404
   24:	18031701 	stmdane	r3, {r0, r8, r9, sl, ip}
-  28:	1b021a01 	blne	86834 <_bss_start-0x877797cc>
+  28:	1b021a01 	blne	86834 <_start-0x877797cc>
   2c:	22011c03 	andcs	r1, r1, #768	; 0x300
   30:	地址 0x0000000000000030 越界。
 

@@ -1,5 +1,5 @@
 CROSS_COMPILE ?= arm-linux-gnueabihf-
-TARGET        ?= key
+TARGET        ?= int
 
 CC            := $(CROSS_COMPILE)gcc
 LD            := $(CROSS_COMPILE)ld
@@ -8,20 +8,20 @@ OBJDUMP       := $(CROSS_COMPILE)objdump
 
 INCUDIRS      := project \
                  imx6u \
-                 bsp/clk \
 				 bsp/delay \
 				 bsp/led \
 				 bsp/beep \
-				 bsp/key
+				 bsp/key \
+				 bsp/uart
 				 
 
 SRCDIRS       := project \
                  imx6u \
-                 bsp/clk \
 				 bsp/delay \
 				 bsp/led \
 				 bsp/beep \
-				 bsp/key
+				 bsp/key \
+				 bsp/uart
                   			
 INCLUDE       := $(patsubst %, -I %, $(INCUDIRS))
 
@@ -53,4 +53,4 @@ $(COBJS) : obj/%.o : %.c
 .PHONY : clean
 clean  :
 	-rm -rf $(OBJS) $(TARGET).bin $(TARGET).elf $(TARGET).dis
-	-rm -rf *.bin *.elf *.dis load.imx6u
+	-rm -rf *.bin *.elf *.dis load.imx

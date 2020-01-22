@@ -1,11 +1,6 @@
 .global _start
 .global _bss_start
 
-_bss_start:
-    .word __bss_start
-
-_bss_end:
-    .word __bss_end
 
 _start:
     /*设置处理器进入SVC模式 */
@@ -15,6 +10,12 @@ _start:
     msr cpsr, r0           /*写回去cpsr寄存器 */
 
     /*清除bss段  */
+_bss_start:
+    .word __bss_start
+
+_bss_end:
+    .word __bss_end
+
     ldr r0, _bss_start
     ldr r1, _bss_end
     mov r2, #0
