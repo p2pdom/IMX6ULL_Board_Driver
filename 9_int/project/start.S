@@ -3,7 +3,6 @@
 .global _bss_end
 
 
-
 _start:
     b Reset_Handler      /*复位中断     */
     b Undefined_Handler  /*未定义中断   */
@@ -16,6 +15,8 @@ _start:
 
 /*复位中断服务函数*/
 Reset_Handler:
+
+    cpsid i  //关闭全局中断
 
     /*关闭cache和MMU */
     /*
@@ -30,7 +31,7 @@ Reset_Handler:
     bic r0, r0, #(1<<11)  //关闭分支预测
     bic r0, r0, #(1<<12)  //关闭I_cache
     mcr p15, 0, r0, c1, c0, 0
-
+    
     /*设置中断向量偏移 */
     ldr r0, =0x87800000
     dsb  //数据同步
@@ -92,6 +93,7 @@ Reset_Handler:
     dsb  //数据同步
     isb  //指令同步
 
+    /*清除bss段 */
 _bss_start:
     .word __bss_start
 
@@ -111,6 +113,9 @@ bss_loop:
     bic r0, r0, #0x1F    /*讲r0低5位清零 */
     orr r0, r0, #0x13    /*设置为SVC模式 */
     msr cpsr, r0         /*写回去cpsr寄存器 */
+
+    cpsie i  //使能全局中断
+
     b main
 
 
@@ -133,7 +138,45 @@ DataAbort_Handler:
 
 /*IRQ中断服务函数*/
 IRQ_Handler:
-    b IRQ_Handler
+    push {lr}
+    push {r0-r3, r12}
+
+    mrs r0, spsr
+    push {r0}
+
+    mrc p15, 4, r1, c15, c0, 0 //读取GIC控制器寄存器组的基地址
+    /*
+     *  GIC寄存器组的结构:
+     *      0x0000-0x0FFF Reserved
+     *      0x1000-0x1FFF Distributor    ->  分发器
+     *      0x2000-0x3FFF CPU interface  ->  CPU接口
+     *      0x4000-0x4FFF Virtual interface control common base address
+     *      0x5000-0x5FFF Virtual interface control, processor-specific base address
+     *      0x6000-0x7FFF Virtual CPU interface
+     */
+    add r1, r1, #0x2000
+    ldr r0, [r1, #0x0C]  //R0内部保存了GICC_IAR寄存器的值
+
+    push {r0-r1}
+
+    cps #0x13  //进入SVC模式
+
+    push {lr}
+    ldr r2, =system_irqhandler  //进入C语言函数处理中断
+    blx r2
+
+    pop {lr}
+    cps #0x12  //进入IRQ模式
+    pop {r0-r1}
+    str r0, [r1, #0x10]
+
+    pop {r0}
+    msr spsr_cxsf, r0
+
+    pop {r0-r3, r12}
+    pop {lr}
+
+    subs pc, lr, #4
 
 /*FIQ快速中断服务函数*/
 FIQ_Handler:

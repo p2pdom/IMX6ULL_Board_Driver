@@ -1,8 +1,8 @@
 /*
  *  imx6ull时钟初始化
  */
-#ifndef __CLK_INIT_H
-#define __CLK_INIT_H
+#ifndef __IMX6ULL_CLK_H
+#define __IMX6ULL_CLK_H
 
 //头文件包含
 

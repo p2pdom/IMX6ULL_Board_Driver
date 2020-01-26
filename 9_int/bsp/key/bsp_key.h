@@ -8,15 +8,13 @@
 #ifndef __BSP_KEY_H
 #define __BSP_KEY_H
 
-//寄存器宏定义
-#define CCM_CCGR1 *((volatile unsigned int *)0x020C406C)
-#define KEY_MUX IOMUXC_SW_MUX_CTL_PAD_UART1_CTS_B
-#define IOMUXC_SW_MUX_CTL_PAD_UART1_CTS_B *((volatile unsigned int *)0x020E008C)
-#define KEY_PAD IOMUXC_SW_PAD_CTL_PAD_UART1_CTS_B
-#define IOMUXC_SW_PAD_CTL_PAD_UART1_CTS_B *((volatile unsigned int *)0x020E0318)
-#define GPIO1_DR   *((volatile unsigned int *)0x0209C000)
-#define GPIO1_GDIR *((volatile unsigned int *)0x0209C004)    
+#include "imx6ull.h"
 
+#include "imx6ull_gpio.h"
+#include "imx6ull_int.h"
+
+#include "bsp_beep.h"
+ 
 //必要值定义
 typedef unsigned char u8;
 #define KEY_PRESS 0
@@ -25,11 +23,13 @@ typedef unsigned char u8;
 #define LOOSE_RETURN 0
 
 //宏定义型函数
-#define KEY_VALUE ((GPIO1_DR>>18)&0x01)
+#define KEY_VALUE ((GPIO1->DR>>18)&0x01)
 
 //function declaration
 void Bsp_Key_Init(void);
 u8 Bsp_Key_Getvalue(u8 mode);
 
+void Bsp_Key_Init_withInterrupt(void);
+void gpio1_io18_irqHandler(unsigned int gicciar, void *param);
 #endif // !__BSP_KEY_H
 

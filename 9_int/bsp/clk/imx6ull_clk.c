@@ -1,4 +1,4 @@
-#include "clk_init.h"
+#include "imx6ull_clk.h"
 
 void Imx6ull_Clk_Init(void)
 {

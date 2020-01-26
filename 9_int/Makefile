@@ -9,19 +9,25 @@ OBJDUMP       := $(CROSS_COMPILE)objdump
 INCUDIRS      := project \
                  imx6u \
 				 bsp/delay \
+				 bsp/clk \
 				 bsp/led \
 				 bsp/beep \
 				 bsp/key \
-				 bsp/uart
+				 bsp/uart \
+				 bsp/int \
+				 bsp/gpio
 				 
 
 SRCDIRS       := project \
                  imx6u \
 				 bsp/delay \
+				 bsp/clk \
 				 bsp/led \
 				 bsp/beep \
 				 bsp/key \
-				 bsp/uart
+				 bsp/uart \
+				 bsp/int \
+				 bsp/gpio
                   			
 INCLUDE       := $(patsubst %, -I %, $(INCUDIRS))
 

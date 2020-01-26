@@ -8,21 +8,19 @@
 void Beep_Init(void)
 {
     //开启时钟
-    CCGR1 &= ~(3<<30);
-    CCGR1 |=  (3<<30);    
-
+    CCM->CCGR1 &= ~(3<<30);
+    CCM->CCGR1 |=  (3<<30); 
+   
     //设置管脚属性
-    BEEP_MUX &= ~(0xF<<0);
-    BEEP_MUX |=  (0x5<<0);
-    
-    BEEP_PAD  = 0x9;
+    IOMUXC_SetPinMux(IOMUXC_SNVS_SNVS_TAMPER1_GPIO5_IO01,0);
+    IOMUXC_SetPinConfig(IOMUXC_SNVS_SNVS_TAMPER1_GPIO5_IO01,0X10B0);
 
     //讲GPIO5_IO1设置为输出
-    GPIO5_GDIR &= ~(1<<1);
-    GPIO5_GDIR |=  (1<<1);
+    GPIO5->GDIR &= ~(1<<1);
+    GPIO5->GDIR |=  (1<<1);
 
     //默认设置BEEP关闭
-    GPIO5_DR |= (1<<1);
+    GPIO5->DR |= (1<<1);
 }
 
 /*

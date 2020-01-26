@@ -2,11 +2,12 @@
 #define __MAIN_H
 
 
-#include "MCIMX6Y2.h"
-#include "fsl_common.h"
-#include "fsl_iomuxc.h"
+#include "imx6ull.h"
 
-#include "clk_init.h"
+
+#include "imx6ull_clk.h"
+#include "imx6ull_gpio.h"
+#include "imx6ull_int.h"
 
 #include "delay.h"
 

@@ -4,5 +4,12 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"imx6ull_gpio.h": "c",
+			"main.h": "c",
+			"imx6ull_clk.h": "c",
+			"imx6ull_int.h": "c"
+		}
+	}
 }
