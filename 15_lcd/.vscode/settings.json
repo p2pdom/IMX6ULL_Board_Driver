@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "imx6ull_elcdif.h": "c",
+        "imx6ull_epit.h": "c",
+        "bsp_lcd.h": "c",
+        "imx6ull_gpt.h": "c",
+        "imx6ull.h": "c"
+    }
+}
